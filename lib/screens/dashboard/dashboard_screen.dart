@@ -1,4 +1,5 @@
 import '../../../responsive.dart';
+import 'components/collection_table.dart';
 import 'components/my_fields.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,8 @@ class DashboardScreen extends StatelessWidget {
                     children: [
                       MyFiles(),
                       SizedBox(height: defaultPadding),
-                      RecentFiles(),
+                      // RecentFiles(),
+                      CollectionTable(),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context)) HistoryDetails(),
@@ -51,3 +53,5 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 }
+
+class MyTables {}
