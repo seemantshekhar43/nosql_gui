@@ -22,23 +22,29 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            "Dashboard",
+            "NoSQL GUI",
             style: Theme.of(context).textTheme.headline6,
           ),
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         Expanded(child: SearchField()),
-        ProfileCard()
+        CollectionSelector()
       ],
     );
   }
 }
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({
+class CollectionSelector extends StatefulWidget {
+  const CollectionSelector({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<CollectionSelector> createState() => _CollectionSelectorState();
+}
+
+class _CollectionSelectorState extends State<CollectionSelector> {
+   String? _chosenValue;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,20 +58,19 @@ class ProfileCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(color: Colors.white10),
       ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/profile_pic.png",
-            height: 38,
-          ),
-          if (!Responsive.isMobile(context))
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
-            ),
-          Icon(Icons.keyboard_arrow_down),
-        ],
+      child: DropdownButton<String>(
+        focusColor: Colors.white,
+        value: _chosenValue,
+        items: collectionsMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        hint: Text("Select Table"),
+        onChanged: (String? value){setState(() {
+          _chosenValue = value!;
+        });},
       ),
     );
   }
