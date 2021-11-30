@@ -12,7 +12,7 @@ class SideMenu extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
+            child: Center(child: Text("NoSQL GUI",style: TextStyle(fontSize: 20),)),
           ),
           DrawerListTile(
             title: "Dashboard",
@@ -20,7 +20,7 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            title: "Transaction",
+            title: "Collections",
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {},
           ),
@@ -35,7 +35,7 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            title: "Store",
+            title: "Database",
             svgSrc: "assets/icons/menu_store.svg",
             press: () {},
           ),
@@ -45,7 +45,7 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            title: "Profile",
+            title: "User",
             svgSrc: "assets/icons/menu_profile.svg",
             press: () {},
           ),
