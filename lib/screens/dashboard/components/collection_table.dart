@@ -45,194 +45,175 @@ class _CollectionTableState extends State<CollectionTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.table_chart_outlined),
-            tooltip: 'Change footer',
-            onPressed: () {
-              // handle the press
-              setState(() {
-                _customFooter = !_customFooter;
-              });
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        labelText: 'Search by company',
-                      ),
-                      onSubmitted: (vlaue) {
-                        _source.filterServerSide(_searchController.text);
-                      },
-                    ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    labelText: 'Search by company',
                   ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _searchController.text = '';
-                    });
+                  onSubmitted: (vlaue) {
                     _source.filterServerSide(_searchController.text);
                   },
-                  icon: const Icon(Icons.clear),
                 ),
-                IconButton(
-                  onPressed: () =>
-                      _source.filterServerSide(_searchController.text),
-                  icon: const Icon(Icons.search),
-                ),
-              ],
+              ),
             ),
-            AdvancedPaginatedDataTable(
-              addEmptyRows: false,
-              source: _source,
-              sortAscending: _sortAsc,
-              sortColumnIndex: _sortIndex,
-              showFirstLastButtons: true,
-              rowsPerPage: _rowsPerPage,
-              availableRowsPerPage: const [10, 20, 30, 50],
-              onRowsPerPageChanged: (newRowsPerPage) {
-                if (newRowsPerPage != null) {
-                  setState(() {
-                    _rowsPerPage = newRowsPerPage;
-                  });
-                }
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _searchController.text = '';
+                });
+                _source.filterServerSide(_searchController.text);
               },
-              columns: [
-                DataColumn(
-                  label: const Text('ID'),
-                  numeric: true,
-                  onSort: setSort,
-                ),
-                DataColumn(
-                  label: const Text('Company'),
-                  onSort: setSort,
-                ),
-                DataColumn(
-                  label: Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: const [
-                        Text('First Person'),
-                        SizedBox(
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              labelStyle: TextStyle(
-                                fontSize: 12,
-                              ),
-                              label: Text(
-                                'Search',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          height: 25,
-                          width: 100,
-                        ),
-                      ],
-                    ),
-                    width: 200,
-                  ),
-                  onSort: setSort,
-                ),
-                DataColumn(
-                  label: const Text('Last name'),
-                  onSort: setSort,
-                ),
-                DataColumn(
-                  label: const Text('Phone'),
-                  onSort: setSort,
-                ),
-              ],
-              //Optianl override to support custom data row text / translation
-              getFooterRowText:
-                  (startRow, pageSize, totalFilter, totalRowsWithoutFilter) {
-                final localizations = MaterialLocalizations.of(context);
-                var amountText = localizations.pageRowsInfoTitle(
-                  startRow,
-                  pageSize,
-                  totalFilter ?? totalRowsWithoutFilter,
-                  false,
-                );
-
-                if (totalFilter != null) {
-                  //Filtered data source show addtional information
-                  amountText += ' filtered from ($totalRowsWithoutFilter)';
-                }
-
-                return amountText;
-              },
-              customTableFooter: _customFooter
-                  ? (source, offset) {
-                      final maxPagesToShow = 6;
-                      final maxPagesBeforeCurrent = 3;
-                      final lastRequestDetails = source.lastDetails!;
-                      final rowsForPager = lastRequestDetails.filteredRows ??
-                          lastRequestDetails.totalRows;
-                      final totalPages = rowsForPager ~/ _rowsPerPage;
-                      final currentPage = (offset ~/ _rowsPerPage) + 1;
-                      List<int> pageList = [];
-                      if (currentPage > 1) {
-                        pageList.addAll(
-                          List.generate(currentPage - 1, (index) => index + 1),
-                        );
-                        //Keep up to 3 pages before current in the list
-                        pageList.removeWhere(
-                          (element) =>
-                              element < currentPage - maxPagesBeforeCurrent,
-                        );
-                      }
-                      pageList.add(currentPage);
-                      //Add reminding pages after current to the list
-                      pageList.addAll(
-                        List.generate(
-                          maxPagesToShow - (pageList.length - 1),
-                          (index) => (currentPage + 1) + index,
-                        ),
-                      );
-                      pageList.removeWhere((element) => element > totalPages);
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: pageList
-                            .map(
-                              (e) => TextButton(
-                                onPressed: e != currentPage
-                                    ? () {
-                                        //Start index is zero based
-                                        source.setNextView(
-                                          startIndex: (e - 1) * _rowsPerPage,
-                                        );
-                                      }
-                                    : null,
-                                child: Text(
-                                  e.toString(),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      );
-                    }
-                  : null,
+              icon: const Icon(Icons.clear),
+            ),
+            IconButton(
+              onPressed: () =>
+                  _source.filterServerSide(_searchController.text),
+              icon: const Icon(Icons.search),
             ),
           ],
         ),
-      ),
+        AdvancedPaginatedDataTable(
+          addEmptyRows: false,
+          source: _source,
+          sortAscending: _sortAsc,
+          sortColumnIndex: _sortIndex,
+          showFirstLastButtons: true,
+          rowsPerPage: _rowsPerPage,
+          availableRowsPerPage: const [10, 20, 30, 50],
+          onRowsPerPageChanged: (newRowsPerPage) {
+            if (newRowsPerPage != null) {
+              setState(() {
+                _rowsPerPage = newRowsPerPage;
+              });
+            }
+          },
+          columns: [
+            DataColumn(
+              label: const Text('ID'),
+              numeric: true,
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: const Text('Company'),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: const [
+                    Text('First Person'),
+                    SizedBox(
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          labelStyle: TextStyle(
+                            fontSize: 12,
+                          ),
+                          label: Text(
+                            'Search',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      height: 25,
+                      width: 100,
+                    ),
+                  ],
+                ),
+                width: 200,
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: const Text('Last name'),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: const Text('Phone'),
+              onSort: setSort,
+            ),
+          ],
+          //Optianl override to support custom data row text / translation
+          getFooterRowText:
+              (startRow, pageSize, totalFilter, totalRowsWithoutFilter) {
+            final localizations = MaterialLocalizations.of(context);
+            var amountText = localizations.pageRowsInfoTitle(
+              startRow,
+              pageSize,
+              totalFilter ?? totalRowsWithoutFilter,
+              false,
+            );
+
+            if (totalFilter != null) {
+              //Filtered data source show addtional information
+              amountText += ' filtered from ($totalRowsWithoutFilter)';
+            }
+
+            return amountText;
+          },
+          customTableFooter: _customFooter
+              ? (source, offset) {
+            final maxPagesToShow = 6;
+            final maxPagesBeforeCurrent = 3;
+            final lastRequestDetails = source.lastDetails!;
+            final rowsForPager = lastRequestDetails.filteredRows ??
+                lastRequestDetails.totalRows;
+            final totalPages = rowsForPager ~/ _rowsPerPage;
+            final currentPage = (offset ~/ _rowsPerPage) + 1;
+            List<int> pageList = [];
+            if (currentPage > 1) {
+              pageList.addAll(
+                List.generate(currentPage - 1, (index) => index + 1),
+              );
+              //Keep up to 3 pages before current in the list
+              pageList.removeWhere(
+                    (element) =>
+                element < currentPage - maxPagesBeforeCurrent,
+              );
+            }
+            pageList.add(currentPage);
+            //Add reminding pages after current to the list
+            pageList.addAll(
+              List.generate(
+                maxPagesToShow - (pageList.length - 1),
+                    (index) => (currentPage + 1) + index,
+              ),
+            );
+            pageList.removeWhere((element) => element > totalPages);
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: pageList
+                  .map(
+                    (e) => TextButton(
+                  onPressed: e != currentPage
+                      ? () {
+                    //Start index is zero based
+                    source.setNextView(
+                      startIndex: (e - 1) * _rowsPerPage,
+                    );
+                  }
+                      : null,
+                  child: Text(
+                    e.toString(),
+                  ),
+                ),
+              )
+                  .toList(),
+            );
+          }
+              : null,
+        ),
+      ],
     );
   }
 
