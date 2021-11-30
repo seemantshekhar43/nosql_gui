@@ -22,7 +22,7 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            "NoSQL GUI",
+            "Dashboard",
             style: Theme.of(context).textTheme.headline6,
           ),
         if (!Responsive.isMobile(context))
