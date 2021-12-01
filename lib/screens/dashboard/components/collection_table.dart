@@ -105,7 +105,7 @@ class _CollectionTableState extends State<CollectionTable> {
 
             DataColumn(
               label: Container(
-                alignment: Alignment.center,
+
                 child: Column(
                   children: const [
                     Text('Name'),
@@ -259,24 +259,58 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
       if (lastSearchTerm.isNotEmpty) 'companyFilter': lastSearchTerm,
     };
 
-    final requestUri = Uri.https(
-      'example.devowl.de',
-      '',
-      queryParameter,
-    );
+    // final requestUri = Uri.https(
+    //   'example.devowl.de',
+    //   '',
+    //   queryParameter,
+    // );
+    //
+    // final response = await http.get(requestUri);
+    // if (response.statusCode == 200) {
+    //   final data = Data.regionList;
+    //   return RemoteDataSourceDetails(
+    //     data.length,
+    //     data,
+    //     filteredRows: lastSearchTerm.isNotEmpty
+    //         ? data.length
+    //         : null,
+    //   );
+    // } else {
+    //   throw Exception('Unable to query remote server');
+    // }
 
-    final response = await http.get(requestUri);
-    if (response.statusCode == 200) {
-      final data = Data.regionList;
-      return RemoteDataSourceDetails(
-        data.length,
-        data,
-        filteredRows: lastSearchTerm.isNotEmpty
-            ? data.length
-            : null,
-      );
-    } else {
-      throw Exception('Unable to query remote server');
-    }
+    List<Region> data = Data.regionList;
+
+      int index = pageRequest.columnSortIndex!;
+
+      switch(index){
+        case 0: {
+          data.sort((a, b) => a.id.compareTo(b.id));
+          print('called');
+          for(Region region in data){
+            print(region.id);
+          }
+          break;
+        }
+        case 1: {
+          data.sort((a, b) => a.name.compareTo(b.name));
+          break;
+        }
+        case 2: {
+          data.sort((a, b) => a.comment.compareTo(b.comment));
+          break;
+        }
+      }
+      if(!pageRequest.sortAscending!){
+        data = data.reversed.toList();
+      }
+
+    return RemoteDataSourceDetails(
+      data.length,
+      data,
+      filteredRows: lastSearchTerm.isNotEmpty
+          ? data.length
+          : null,
+    );
   }
 }
