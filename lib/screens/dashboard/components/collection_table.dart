@@ -4,6 +4,8 @@ import 'package:advanced_datatable/datatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:nosql_gui/models/tpch/region.dart';
+import 'package:nosql_gui/repository/data.dart';
 
 import 'company_contact.dart';
 import 'company_contact.dart';
@@ -56,7 +58,7 @@ class _CollectionTableState extends State<CollectionTable> {
                 child: TextField(
                   controller: _searchController,
                   decoration: const InputDecoration(
-                    labelText: 'Search by company',
+                    labelText: 'Search by name',
                   ),
                   onSubmitted: (vlaue) {
                     _source.filterServerSide(_searchController.text);
@@ -98,19 +100,15 @@ class _CollectionTableState extends State<CollectionTable> {
           columns: [
             DataColumn(
               label: const Text('ID'),
-              numeric: true,
               onSort: setSort,
             ),
-            DataColumn(
-              label: const Text('Company'),
-              onSort: setSort,
-            ),
+
             DataColumn(
               label: Container(
                 alignment: Alignment.center,
                 child: Column(
                   children: const [
-                    Text('First Person'),
+                    Text('Name'),
                     SizedBox(
                       child: TextField(
                         textAlign: TextAlign.center,
@@ -134,11 +132,7 @@ class _CollectionTableState extends State<CollectionTable> {
               onSort: setSort,
             ),
             DataColumn(
-              label: const Text('Last name'),
-              onSort: setSort,
-            ),
-            DataColumn(
-              label: const Text('Phone'),
+              label: const Text('Comment'),
               onSort: setSort,
             ),
           ],
@@ -226,7 +220,7 @@ class _CollectionTableState extends State<CollectionTable> {
 
 typedef SelectedCallBack = Function(String id, bool newSelectState);
 
-class ExampleSource extends AdvancedDataTableSource<CompanyContact> {
+class ExampleSource extends AdvancedDataTableSource<Region> {
   List<String> selectedIds = [];
   String lastSearchTerm = '';
 
@@ -253,7 +247,7 @@ class ExampleSource extends AdvancedDataTableSource<CompanyContact> {
   }
 
   @override
-  Future<RemoteDataSourceDetails<CompanyContact>> getNextPage(
+  Future<RemoteDataSourceDetails<Region>> getNextPage(
     NextPageRequest pageRequest,
   ) async {
     //the remote data source has to support the pagaing and sorting
@@ -273,16 +267,12 @@ class ExampleSource extends AdvancedDataTableSource<CompanyContact> {
 
     final response = await http.get(requestUri);
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      final data = Data.regionList;
       return RemoteDataSourceDetails(
-        int.parse(data['totalRows'].toString()),
-        (data['rows'] as List<dynamic>)
-            .map(
-              (json) => CompanyContact.fromJson(json as Map<String, dynamic>),
-            )
-            .toList(),
+        data.length,
+        data,
         filteredRows: lastSearchTerm.isNotEmpty
-            ? (data['rows'] as List<dynamic>).length
+            ? data.length
             : null,
       );
     } else {
