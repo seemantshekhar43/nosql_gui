@@ -1,14 +1,9 @@
-import 'dart:convert';
 import 'package:advanced_datatable/advanced_datatable_source.dart';
 import 'package:advanced_datatable/datatable.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:nosql_gui/models/tpch/region.dart';
 import 'package:nosql_gui/repository/data.dart';
-
-import 'company_contact.dart';
-import 'company_contact.dart';
 
 //TODO Support server side filter in example
 //First update server side to include a filter
@@ -76,8 +71,7 @@ class _CollectionTableState extends State<CollectionTable> {
               icon: const Icon(Icons.clear),
             ),
             IconButton(
-              onPressed: () =>
-                  _source.filterServerSide(_searchController.text),
+              onPressed: () => _source.filterServerSide(_searchController.text),
               icon: const Icon(Icons.search),
             ),
           ],
@@ -102,10 +96,8 @@ class _CollectionTableState extends State<CollectionTable> {
               label: const Text('ID'),
               onSort: setSort,
             ),
-
             DataColumn(
               label: Container(
-
                 child: Column(
                   children: const [
                     Text('Name'),
@@ -156,55 +148,55 @@ class _CollectionTableState extends State<CollectionTable> {
           },
           customTableFooter: _customFooter
               ? (source, offset) {
-            final maxPagesToShow = 6;
-            final maxPagesBeforeCurrent = 3;
-            final lastRequestDetails = source.lastDetails!;
-            final rowsForPager = lastRequestDetails.filteredRows ??
-                lastRequestDetails.totalRows;
-            final totalPages = rowsForPager ~/ _rowsPerPage;
-            final currentPage = (offset ~/ _rowsPerPage) + 1;
-            List<int> pageList = [];
-            if (currentPage > 1) {
-              pageList.addAll(
-                List.generate(currentPage - 1, (index) => index + 1),
-              );
-              //Keep up to 3 pages before current in the list
-              pageList.removeWhere(
-                    (element) =>
-                element < currentPage - maxPagesBeforeCurrent,
-              );
-            }
-            pageList.add(currentPage);
-            //Add reminding pages after current to the list
-            pageList.addAll(
-              List.generate(
-                maxPagesToShow - (pageList.length - 1),
-                    (index) => (currentPage + 1) + index,
-              ),
-            );
-            pageList.removeWhere((element) => element > totalPages);
-
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: pageList
-                  .map(
-                    (e) => TextButton(
-                  onPressed: e != currentPage
-                      ? () {
-                    //Start index is zero based
-                    source.setNextView(
-                      startIndex: (e - 1) * _rowsPerPage,
+                  final maxPagesToShow = 6;
+                  final maxPagesBeforeCurrent = 3;
+                  final lastRequestDetails = source.lastDetails!;
+                  final rowsForPager = lastRequestDetails.filteredRows ??
+                      lastRequestDetails.totalRows;
+                  final totalPages = rowsForPager ~/ _rowsPerPage;
+                  final currentPage = (offset ~/ _rowsPerPage) + 1;
+                  List<int> pageList = [];
+                  if (currentPage > 1) {
+                    pageList.addAll(
+                      List.generate(currentPage - 1, (index) => index + 1),
+                    );
+                    //Keep up to 3 pages before current in the list
+                    pageList.removeWhere(
+                      (element) =>
+                          element < currentPage - maxPagesBeforeCurrent,
                     );
                   }
-                      : null,
-                  child: Text(
-                    e.toString(),
-                  ),
-                ),
-              )
-                  .toList(),
-            );
-          }
+                  pageList.add(currentPage);
+                  //Add reminding pages after current to the list
+                  pageList.addAll(
+                    List.generate(
+                      maxPagesToShow - (pageList.length - 1),
+                      (index) => (currentPage + 1) + index,
+                    ),
+                  );
+                  pageList.removeWhere((element) => element > totalPages);
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: pageList
+                        .map(
+                          (e) => TextButton(
+                            onPressed: e != currentPage
+                                ? () {
+                                    //Start index is zero based
+                                    source.setNextView(
+                                      startIndex: (e - 1) * _rowsPerPage,
+                                    );
+                                  }
+                                : null,
+                            child: Text(
+                              e.toString(),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
               : null,
         ),
       ],
@@ -243,6 +235,7 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
 
   void filterServerSide(String filterQuery) {
     lastSearchTerm = filterQuery.toLowerCase().trim();
+    print(lastSearchTerm);
     setNextView();
   }
 
@@ -279,38 +272,61 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
     //   throw Exception('Unable to query remote server');
     // }
 
-    List<Region> data = Data.regionList;
+    List<Region>? data = Data.regionList;
 
-      int index = pageRequest.columnSortIndex!;
+    if (lastSearchTerm.isNotEmpty) {
+      String pattern = '';
+      for(int i=0; i<lastSearchTerm.length; i++) {
+        var char = lastSearchTerm[i];
+        switch (char)
+        {
+          case '%':
+            pattern += ".*";
+            break;
+          case '_':
+            pattern += ".";
+            break;
+          default:
+            pattern += char;
+            break;
+        }
 
-      switch(index){
-        case 0: {
+      }
+      pattern += '\$';
+      RegExp regExp = RegExp(pattern);
+      data = data
+          .where(
+              (element) => regExp.hasMatch(element.name.toLowerCase()))
+          .toList();
+    }
+
+    int index = pageRequest.columnSortIndex!;
+
+    switch (index) {
+      case 0:
+        {
           data.sort((a, b) => a.id.compareTo(b.id));
-          print('called');
-          for(Region region in data){
-            print(region.id);
-          }
           break;
         }
-        case 1: {
+      case 1:
+        {
           data.sort((a, b) => a.name.compareTo(b.name));
           break;
         }
-        case 2: {
+      case 2:
+        {
           data.sort((a, b) => a.comment.compareTo(b.comment));
           break;
         }
-      }
-      if(!pageRequest.sortAscending!){
-        data = data.reversed.toList();
-      }
+    }
+    if (!pageRequest.sortAscending!) {
+      data = data.reversed.toList();
+    }
 
     return RemoteDataSourceDetails(
       data.length,
       data,
-      filteredRows: lastSearchTerm.isNotEmpty
-          ? data.length
-          : null,
+      filteredRows: lastSearchTerm.isNotEmpty ? data.length : null,
     );
   }
 }
