@@ -57,6 +57,9 @@ class _CollectionTableState extends State<CollectionTable> {
                   ),
                   onSubmitted: (vlaue) {
                     _source.filterServerSide(_searchController.text);
+                    setState(() {
+                      _sortIndex = 1;
+                    });
                   },
                 ),
               ),
@@ -71,7 +74,13 @@ class _CollectionTableState extends State<CollectionTable> {
               icon: const Icon(Icons.clear),
             ),
             IconButton(
-              onPressed: () => _source.filterServerSide(_searchController.text),
+              onPressed: () {
+                setState(() {
+                  _sortIndex = 1;
+                  _source.filterServerSide(_searchController.text);
+                });
+
+              },
               icon: const Icon(Icons.search),
             ),
           ],
@@ -93,38 +102,81 @@ class _CollectionTableState extends State<CollectionTable> {
           },
           columns: [
             DataColumn(
-              label: const Text('ID'),
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:  [
+                  Text('ID'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val){
+                        setState(() {
+                          _sortIndex = 0;
+                          _source.filterServerSide(val);
+                        });
+
+
+                      },
+
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
               onSort: setSort,
             ),
             DataColumn(
               label: Container(
                 child: Column(
-                  children: const [
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:  [
                     Text('Name'),
                     SizedBox(
                       child: TextField(
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          labelStyle: TextStyle(
-                            fontSize: 12,
-                          ),
-                          label: Text(
-                            'Search',
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
+                        textAlign: TextAlign.start,
+                        onSubmitted: (val){
+                          setState(() {
+                            _sortIndex = 1;
+                            _source.filterServerSide(val);
+                          });
+
+
+                        },
+
                       ),
                       height: 25,
                       width: 100,
                     ),
                   ],
                 ),
-                width: 200,
+
               ),
               onSort: setSort,
             ),
             DataColumn(
-              label: const Text('Comment'),
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:  [
+                  Text('Comment'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val){
+                        setState(() {
+                          _sortIndex = 2;
+                          _source.filterServerSide(val);
+                        });
+
+
+                      },
+
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
               onSort: setSort,
             ),
           ],
@@ -273,7 +325,7 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
     // }
 
     List<Region>? data = Data.regionList;
-
+    int index = pageRequest.columnSortIndex!;
     if (lastSearchTerm.isNotEmpty) {
       String pattern = '';
       for(int i=0; i<lastSearchTerm.length; i++) {
@@ -294,13 +346,33 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
       }
       pattern += '\$';
       RegExp regExp = RegExp(pattern);
+      print("regex : $index");
       data = data
           .where(
-              (element) => regExp.hasMatch(element.name.toLowerCase()))
+              (element){
+                switch (index) {
+                  case 0:
+                    {
+                      return regExp.hasMatch(element.id.toLowerCase());
+                    }
+                  case 1:
+                    {
+                      print("called ${element.name} ");
+                      return regExp.hasMatch(element.name.toLowerCase());
+                    }
+                  case 2:
+                    {
+                      return regExp.hasMatch(element.comment.toLowerCase());
+                    }
+                  default:
+                    return regExp.hasMatch(element.id.toLowerCase());
+                }
+
+              })
           .toList();
     }
 
-    int index = pageRequest.columnSortIndex!;
+
 
     switch (index) {
       case 0:
