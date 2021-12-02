@@ -27,7 +27,7 @@ class DashboardScreen extends StatelessWidget {
                   flex: 5,
                   child: Column(
                     children: [
-                      MyFiles(),
+                      //MyFiles(),
                       SizedBox(height: defaultPadding),
                       // RecentFiles(),
                       CollectionTable(),
