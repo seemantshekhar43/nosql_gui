@@ -391,7 +391,7 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
     List<Region>? data = Data.regionList;
     int index = pageRequest.columnSortIndex!;
     if (lastSearchTerm.isNotEmpty) {
-      String pattern = '';
+      String pattern = '^';
       for (int i = 0; i < lastSearchTerm.length; i++) {
         var char = lastSearchTerm[i];
         switch (char) {
