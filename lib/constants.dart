@@ -9,12 +9,19 @@ const defaultPadding = 16.0;
 
 
 Map<String, String> collectionsMap = {
-  "Order" : "order",
-  "LineItem" : "lineitem",
-  "Part" : "part",
-  "PartSupp" : "partsupp",
-  "Supplier" : "supplier",
-  "Customer" : "customer",
-  "Nation" : "nation",
-  "Region" : "region",
+  "Order" : "ORDER",
+  "LineItem" : "LINEITEM",
+  "Part" : "PART",
+  "PartSupp" : "PARTSUPP",
+  "Supplier" : "SUPPLIER",
+  "Customer" : "CUSTOMER",
+  "Nation" : "NATION",
+  "Region" : "REGION",
 };
+
+List<String> regionColumnList = ["ID", "NAME", "COMMENT"];
+List<String> nationColumnList = ["ID", "NAME", "COMMENT", "REGION"];
+
+enum QueryType{
+  SELECT, SORT_ASCENDING, SORT_DESCENDING, SEARCH
+}

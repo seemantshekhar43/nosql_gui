@@ -6,11 +6,20 @@ import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatefulWidget {
   const Header({
     Key? key,
+    required this.callback,
   }) : super(key: key);
+  final Function callback;
 
+  @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
+
+  String? _chosenValue;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,53 +37,79 @@ class Header extends StatelessWidget {
         if (!Responsive.isMobile(context))
           Spacer(flex: Responsive.isDesktop(context) ? 2 : 1),
         Expanded(child: SearchField()),
-        CollectionSelector()
+        Container(
+          margin: EdgeInsets.only(left: defaultPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultPadding,
+            vertical: defaultPadding / 2,
+          ),
+          decoration: BoxDecoration(
+            color: secondaryColor,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: DropdownButton<String>(
+            focusColor: Colors.white,
+            value: _chosenValue,
+            items: collectionsMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            hint: Text("Select Table"),
+            onChanged: (String? value){setState(() {
+              _chosenValue = value!;
+               widget.callback(collectionsMap[_chosenValue]);
+            });},
+          ),
+        ),
       ],
     );
   }
 }
 
-class CollectionSelector extends StatefulWidget {
-  const CollectionSelector({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<CollectionSelector> createState() => _CollectionSelectorState();
-}
-
-class _CollectionSelectorState extends State<CollectionSelector> {
-   String? _chosenValue;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
-      ),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: DropdownButton<String>(
-        focusColor: Colors.white,
-        value: _chosenValue,
-        items: collectionsMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        hint: Text("Select Table"),
-        onChanged: (String? value){setState(() {
-          _chosenValue = value!;
-        });},
-      ),
-    );
-  }
-}
+// class CollectionSelector extends StatefulWidget {
+//   const CollectionSelector({
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   State<CollectionSelector> createState() => _CollectionSelectorState();
+// }
+//
+// class _CollectionSelectorState extends State<CollectionSelector> {
+//    String? _chosenValue;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: EdgeInsets.only(left: defaultPadding),
+//       padding: EdgeInsets.symmetric(
+//         horizontal: defaultPadding,
+//         vertical: defaultPadding / 2,
+//       ),
+//       decoration: BoxDecoration(
+//         color: secondaryColor,
+//         borderRadius: const BorderRadius.all(Radius.circular(10)),
+//         border: Border.all(color: Colors.white10),
+//       ),
+//       child: DropdownButton<String>(
+//         focusColor: Colors.white,
+//         value: _chosenValue,
+//         items: collectionsMap.keys.toList().map<DropdownMenuItem<String>>((String value) {
+//           return DropdownMenuItem<String>(
+//             value: value,
+//             child: Text(value),
+//           );
+//         }).toList(),
+//         hint: Text("Select Table"),
+//         onChanged: (String? value){setState(() {
+//           _chosenValue = value!;
+//         });},
+//       ),
+//     );
+//   }
+// }
 
 class SearchField extends StatelessWidget {
   const SearchField({

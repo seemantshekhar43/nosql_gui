@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nosql_gui/provider/history_provider.dart';
 import '/screens/main/main_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +8,11 @@ import 'constants.dart';
 import 'controllers/menu_controller.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => HistoryProvider()),
+    ],
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

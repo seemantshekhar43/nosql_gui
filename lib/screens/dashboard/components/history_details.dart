@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import 'chart.dart';
@@ -8,10 +10,14 @@ import 'history_info_card.dart';
 class HistoryDetails extends StatelessWidget {
   const HistoryDetails({
     Key? key,
+    required this.callback,
   }) : super(key: key);
+    final Function callback;
 
   @override
   Widget build(BuildContext context) {
+    HistoryProvider historyProvider = Provider.of<HistoryProvider>(context, listen:true);
+
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -30,16 +36,19 @@ class HistoryDetails extends StatelessWidget {
           ),
           SizedBox(height: defaultPadding),
           //Chart(),
-          ListView.builder(itemCount: Data.historyList.length,
+          ListView.builder(itemCount: historyProvider.list.length,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemBuilder: (context, index){
-            return HistoryInfoCard(
-              imgSrc: Data.historyList[index].imgSrc,
-              collectionName: Data.historyList[index].collectionName,
-              time: Data.historyList[index].time,
-              query: Data.historyList[index].query,
+            return GestureDetector(
+              onTap: () => callback(historyProvider.list[index]),
+              child: HistoryInfoCard(
+                imgSrc: historyProvider.list[index].imgSrc,
+                collectionName: historyProvider.list[index].collection,
+                time: historyProvider.list[index].time,
+                query: historyProvider.list[index].getQueryString(),
+              ),
             );
           }),
         ],
