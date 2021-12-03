@@ -221,7 +221,7 @@ class _NationCollectionTableState extends State<NationCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Nation'),
+                  Text('Region'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -447,6 +447,10 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
             {
               return regExp.hasMatch(element.comment.toLowerCase());
             }
+          case 3:
+            {
+              return regExp.hasMatch(element.region.name.toLowerCase());
+            }
           default:
             return regExp.hasMatch(element.id.toLowerCase());
         }
@@ -471,7 +475,7 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
         }
       case 3:
         {
-          data.sort((a, b) => a.comment.compareTo(b.comment));
+          data.sort((a, b) => a.region.name.compareTo(b.region.name));
           break;
         }
     }
