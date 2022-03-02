@@ -23,6 +23,16 @@ List<String> regionColumnList = ["ID", "NAME", "COMMENT"];
 List<String> nationColumnList = ["ID", "NAME", "COMMENT", "REGION"];
 //4
 List<String> partColumnList = ["ID", "NAME", "MANUFACTURER", "BRAND", "TYPE", "SIZE", "CONTAINER", "RETAIL PRICE", "COMMENT"];
+List<String> customerColumnList = [
+  "ID",
+  "NAME",
+  "ADDRESS",
+  "PHONE",
+  "ACCTBAL",
+  "MKTSEGMENT",
+  "COMMENT",
+  "NATION"
+];
 enum QueryType{
   SELECT, SORT_ASCENDING, SORT_DESCENDING, SEARCH
 }

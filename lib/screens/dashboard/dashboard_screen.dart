@@ -3,6 +3,7 @@ import 'package:nosql_gui/screens/dashboard/components/nation_collection_table.d
 import 'package:nosql_gui/screens/dashboard/components/part_collection_table.dart';
 
 import '../../../responsive.dart';
+import 'components/customer_collection_table.dart';
 import 'components/region_collection_table.dart';
 import 'components/my_fields.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       if(collectionName == "PART")
                         hasHistory ? PartCollectionTable(title: "PART", collectionName: "PART", columns: partColumnList, historyItem: history,):
                         PartCollectionTable(title: "PART", collectionName: "PART", columns: partColumnList,),
+                      if(collectionName == "CUSTOMER")
+                        hasHistory ? CustomerCollectionTable(title: "CUSTOMER", collectionName: "CUSTOMER", columns: customerColumnList, historyItem: history,):
+                        CustomerCollectionTable(title: "CUSTOMER", collectionName: "CUSTOMER", columns: customerColumnList,),
                       if (Responsive.isMobile(context))
                         SizedBox(height: defaultPadding),
                       if (Responsive.isMobile(context)) HistoryDetails(callback: clickCallback,),
