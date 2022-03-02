@@ -1,7 +1,10 @@
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
 import 'package:nosql_gui/models/tpch/nation.dart';
+import 'package:nosql_gui/models/tpch/order.dart';
 import 'package:nosql_gui/models/tpch/region.dart';
+
+import '../models/tpch/part.dart';
 
 class Data{
   Data._();
@@ -55,6 +58,9 @@ class Data{
     Nation("NATION39", "ARGENTINA", "haggle. carefully final deposits detect slyly agai ", regionList[1]),
 
   ];
+
+  static List<Part> partList = [];
+  static List<Order> orderList = [];
 
 
 }

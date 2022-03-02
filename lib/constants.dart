@@ -21,7 +21,8 @@ Map<String, String> collectionsMap = {
 
 List<String> regionColumnList = ["ID", "NAME", "COMMENT"];
 List<String> nationColumnList = ["ID", "NAME", "COMMENT", "REGION"];
-
+//4
+List<String> partColumnList = ["ID", "NAME", "MANUFACTURER", "BRAND", "TYPE", "SIZE", "CONTAINER", "RETAIL PRICE", "COMMENT"];
 enum QueryType{
   SELECT, SORT_ASCENDING, SORT_DESCENDING, SEARCH
 }

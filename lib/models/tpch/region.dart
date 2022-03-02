@@ -24,5 +24,7 @@ class Region extends BaseCollection{
       },
       selected: selectedIds.contains(id.toString()),
     );
+
+
   }
 }
