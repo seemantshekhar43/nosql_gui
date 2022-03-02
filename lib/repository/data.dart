@@ -1,5 +1,6 @@
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
+import 'package:nosql_gui/models/tpch/customer.dart';
 import 'package:nosql_gui/models/tpch/nation.dart';
 import 'package:nosql_gui/models/tpch/order.dart';
 import 'package:nosql_gui/models/tpch/region.dart';
@@ -27,6 +28,6 @@ class Data{
 
   static List<Part> partList = [];
   static List<Order> orderList = [];
-
+  static List<Customer> customerList = [];
 
 }

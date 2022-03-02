@@ -10,6 +10,9 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'controllers/menu_controller.dart';
+import 'models/tpch/customer.dart';
+import 'models/tpch/nation.dart';
+import 'models/tpch/order.dart';
 import 'models/tpch/part.dart';
 
 void main() {
@@ -66,14 +69,14 @@ class MyApp extends StatelessWidget {
       Data.partList.add(part);
     });
 
-    String orderJSON = await rootBundle.loadString('tpch_10mb/ORDER.json');
-    List orderData = jsonDecode(partsJson).toList();
+    String orderJSON = await rootBundle.loadString('tpch_10mb/ORDERS.json');
+    List orderData = jsonDecode(orderJSON).toList();
     orderData.forEach((element) {
-      Part part = Part.fromJson(element);
-      Data.partList.add(part);
+      Order order = Order.fromJson(element);
+      Data.orderList.add(order);
     });
 
-    String customerJson = await rootBundle.loadString('tpch_10mb/PART.json');
+    String customerJson = await rootBundle.loadString('tpch_10mb/CUSTOMER.json');
     List customerData = jsonDecode(customerJson).toList();
     customerData.forEach((element) {
       Customer customer = Customer.fromJson(element);
@@ -81,8 +84,8 @@ class MyApp extends StatelessWidget {
     });
 
     String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
-    List orderData = jsonDecode(nationJson).toList();
-    orderData.forEach((element) {
+    List nationData = jsonDecode(nationJson).toList();
+    nationData.forEach((element) {
       Nation nation = Nation.fromJson(element);
       Data.nationList.add(nation);
     });

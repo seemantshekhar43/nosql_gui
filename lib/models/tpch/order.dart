@@ -1,8 +1,10 @@
+import 'package:nosql_gui/models/tpch/base_collection.dart';
+
 import 'customer.dart';
 import 'lineitem.dart';
 
-class Order {
-  String id;
+class Order extends BaseCollection{
+
   String orderstatus;
   String totalprice;
   String orderdate;
@@ -14,7 +16,7 @@ class Order {
   // List<Lineitem> lineItems;
 
   Order(
-    this.id,
+    id,
     this.orderstatus,
     this.totalprice,
     this.orderdate,
@@ -24,7 +26,7 @@ class Order {
     this.comment,
     this.customer,
     // this.lineItems
-  );
+  ):super(id);
 
   //1
   Order.fromJson(Map<String, dynamic> json)
