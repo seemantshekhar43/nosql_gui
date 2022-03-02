@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:nosql_gui/models/tpch/base_collection.dart';
 
+import '../../tables.dart';
 import 'customer.dart';
 import 'lineitem.dart';
 
-class Order extends BaseCollection{
-
+class Order extends BaseCollection {
   String orderstatus;
   String totalprice;
   String orderdate;
@@ -26,7 +27,31 @@ class Order extends BaseCollection{
     this.comment,
     this.customer,
     // this.lineItems
-  ):super(id);
+  ) : super(id);
+
+  //3
+  DataRow getRow(
+    SelectedCallBack callback,
+    List<String> selectedIds,
+  ) {
+    return DataRow(
+      cells: [
+        DataCell(Text(id.toString())),
+        DataCell(Text(orderstatus)),
+        DataCell(Text(totalprice)),
+        DataCell(Text(orderdate)),
+        DataCell(Text(orderpriority)),
+        DataCell(Text(clerk)),
+        DataCell(Text(shippriority)),
+        DataCell(Text(comment)),
+        DataCell(Text(customer))
+      ],
+      onSelectChanged: (newState) {
+        callback(id.toString(), newState ?? false);
+      },
+      selected: selectedIds.contains(id.toString()),
+    );
+  }
 
   //1
   Order.fromJson(Map<String, dynamic> json)

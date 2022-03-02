@@ -16,11 +16,9 @@ import 'models/tpch/order.dart';
 import 'models/tpch/part.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => HistoryProvider()),
-    ],
-      child: MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => HistoryProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -44,14 +42,15 @@ class MyApp extends StatelessWidget {
         ],
         child: FutureBuilder<String>(
           future: loadData(), // function where you call your api
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {  // AsyncSnapshot<Your object type>
-            if( snapshot.connectionState == ConnectionState.waiting){
-              return  Center(child: Text('Please wait its loading...'));
-            }else{
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            // AsyncSnapshot<Your object type>
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: Text('Please wait its loading...'));
+            } else {
               if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));
               else
-                return MainScreen();  // snapshot.data  :- get your object which is pass from your downloadData() function
+                return MainScreen(); // snapshot.data  :- get your object which is pass from your downloadData() function
             }
           },
         ),
@@ -59,8 +58,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<String> loadData()async{
-
+  Future<String> loadData() async {
     //2
     String partsJson = await rootBundle.loadString('tpch_10mb/PART.json');
     List partsData = jsonDecode(partsJson).toList();
@@ -69,14 +67,15 @@ class MyApp extends StatelessWidget {
       Data.partList.add(part);
     });
 
-    String orderJSON = await rootBundle.loadString('tpch_10mb/ORDERS.json');
-    List orderData = jsonDecode(orderJSON).toList();
+    String orderJson = await rootBundle.loadString('tpch_10mb/ORDERS.json');
+    List orderData = jsonDecode(orderJson).toList();
     orderData.forEach((element) {
       Order order = Order.fromJson(element);
       Data.orderList.add(order);
     });
 
-    String customerJson = await rootBundle.loadString('tpch_10mb/CUSTOMER.json');
+    String customerJson =
+        await rootBundle.loadString('tpch_10mb/CUSTOMER.json');
     List customerData = jsonDecode(customerJson).toList();
     customerData.forEach((element) {
       Customer customer = Customer.fromJson(element);
@@ -97,7 +96,6 @@ class MyApp extends StatelessWidget {
     //   Data.regionList.add(region);
     //
     // });
-
 
     return "true";
   }
