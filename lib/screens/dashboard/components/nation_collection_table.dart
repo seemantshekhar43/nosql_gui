@@ -382,7 +382,7 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
   Future<RemoteDataSourceDetails<Nation>> getNextPage(
       NextPageRequest pageRequest,
       ) async {
-    //the remote data source has to support the pagaing and sorting
+    //the remote data source has to support the paging and sorting
     final queryParameter = <String, dynamic>{
       'offset': pageRequest.offset.toString(),
       'pageSize': pageRequest.pageSize.toString(),
@@ -449,7 +449,7 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
             }
           case 3:
             {
-              return regExp.hasMatch(element.region.name.toLowerCase());
+              return regExp.hasMatch(element.region.toLowerCase());
             }
           default:
             return regExp.hasMatch(element.id.toLowerCase());
@@ -475,10 +475,11 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
         }
       case 3:
         {
-          data.sort((a, b) => a.region.name.compareTo(b.region.name));
+          data.sort((a, b) => a.region.compareTo(b.region));
           break;
         }
     }
+
     if (!pageRequest.sortAscending!) {
       data = data.reversed.toList();
     }

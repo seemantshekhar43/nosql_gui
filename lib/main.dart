@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nosql_gui/models/tpch/region.dart';
 import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
 import '/screens/main/main_screen.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'controllers/menu_controller.dart';
+import 'models/tpch/nation.dart';
 import 'models/tpch/part.dart';
 
 void main() {
@@ -66,12 +68,21 @@ class MyApp extends StatelessWidget {
       Data.partList.add(part);
     });
 
-    String orderJSON = await rootBundle.loadString('tpch_10mb/ORDER.json');
-    List orderData = jsonDecode(partsJson).toList();
+
+    String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
+    List orderData = jsonDecode(nationJson).toList();
     orderData.forEach((element) {
-      Part part = Part.fromJson(element);
-      Data.partList.add(part);
+      Nation nation = Nation.fromJson(element);
+      Data.nationList.add(nation);
     });
+
+    // String regionJson = await rootBundle.loadString('tpch_10mb/REGION.json');
+    // List regionData = jsonDecode(regionJson).toList();
+    // regionData.forEach((element) {
+    //   Region region = Region.fromJson(element);
+    //   Data.regionList.add(region);
+    //
+    // });
 
 
 

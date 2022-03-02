@@ -24,7 +24,12 @@ class Region extends BaseCollection{
       },
       selected: selectedIds.contains(id.toString()),
     );
-
-
   }
+
+  Region.fromJson(Map<String, dynamic> json):
+      name = json['R_NAME'].toString(),
+      comment = json['R_COMMENT'].toString(),
+      super(json['R_REGIONKEY'].toString());
+
+
 }
