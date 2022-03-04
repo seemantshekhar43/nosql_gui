@@ -58,7 +58,7 @@ class Order extends BaseCollection {
               Provider.of<DataProvider>(Data().context, listen: false).updateTempFlag("CUSTOMER");
 
             }),
-        DataCell(Text(totalLineItems(id).toString()),
+        DataCell(Text(lineitems),
             onTap: (){
               List<Lineitem> list = Data().lineItemList.where((element) => element.order == id).toList();
 

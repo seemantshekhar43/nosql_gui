@@ -46,11 +46,20 @@ class DataProvider extends ChangeNotifier{
       _partList.add(part);
     }
 
-    String orderJson = await rootBundle.loadString('tpch_10mb/ORDERS.json');
-    List orderData = jsonDecode(orderJson).toList();
-    for (var element in orderData) {
-      Order order = Order.fromJson(element);
-      _orderList.add(order);
+
+    String regionJson = await rootBundle.loadString('tpch_10mb/REGION.json');
+    List regionData = jsonDecode(regionJson).toList();
+    for (var element in regionData) {
+      Region region = Region.fromJson(element);
+      _regionList.add(region);
+
+    }
+
+    String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
+    List nationData = jsonDecode(nationJson).toList();
+    for (var element in nationData) {
+      Nation nation = Nation.fromJson(element);
+      _nationList.add(nation);
     }
 
     String supplierJson = await rootBundle.loadString('tpch_10mb/SUPPLIER.json');
@@ -82,19 +91,20 @@ class DataProvider extends ChangeNotifier{
       _customerList.add(customer);
     }
 
-    String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
-    List nationData = jsonDecode(nationJson).toList();
-    for (var element in nationData) {
-      Nation nation = Nation.fromJson(element);
-      _nationList.add(nation);
-    }
+    String orderJson = await rootBundle.loadString('tpch_10mb/ORDERS.json');
+    List orderData = jsonDecode(orderJson).toList();
+    for (var element in orderData) {
+      Order order = Order.fromJson(element);
 
-    String regionJson = await rootBundle.loadString('tpch_10mb/REGION.json');
-    List regionData = jsonDecode(regionJson).toList();
-    for (var element in regionData) {
-      Region region = Region.fromJson(element);
-      _regionList.add(region);
+      int count = 0;
+      for(var item in _lineItemList){
+        if(item.order == order.id){
+          count++;
+        }
+      }
 
+      order.lineitems = count.toString();
+      _orderList.add(order);
     }
 
 

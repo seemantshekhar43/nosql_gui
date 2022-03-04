@@ -677,7 +677,7 @@ class ExampleSource extends AdvancedDataTableSource<Order> {
         }
       case 9:
         {
-          data.sort((a, b) => a.lineitems.compareTo(b.lineitems));
+          data.sort((a, b) => int.parse(a.lineitems) - int.parse(b.lineitems));
           break;
         }
     }
