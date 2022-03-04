@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
-import 'package:nosql_gui/models/tpch/region.dart';
+import 'package:nosql_gui/models/tpch/nation.dart';
+import 'package:nosql_gui/models/tpch/partsupp.dart';
 import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +20,13 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }
 
-class RegionCollectionTable extends StatefulWidget {
-  const RegionCollectionTable(
+class PartsuppCollectionTable extends StatefulWidget {
+  const PartsuppCollectionTable(
       {Key? key, this.title, this.collectionName, this.columns, this.historyItem})
       : super(key: key);
   final String? title;
@@ -33,10 +34,10 @@ class RegionCollectionTable extends StatefulWidget {
   final String? collectionName;
   final List<String>? columns;
   @override
-  _RegionCollectionTableState createState() => _RegionCollectionTableState();
+  _PartsuppCollectionTableState createState() => _PartsuppCollectionTableState();
 }
 
-class _RegionCollectionTableState extends State<RegionCollectionTable> {
+class _PartsuppCollectionTableState extends State<PartsuppCollectionTable> {
   var _rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
   final _source = ExampleSource();
   var _sortIndex = 0;
@@ -169,11 +170,34 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
               onSort: setSort,
             ),
             DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('PartSupp Key'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 0;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
               label: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Name'),
+                    Text('Part'),
                     SizedBox(
                       child: TextField(
                         textAlign: TextAlign.start,
@@ -198,13 +222,59 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Comment'),
+                  Text('Available Qty'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
                       onSubmitted: (val) {
                         setState(() {
                           _sortIndex = 2;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Supply Cost'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Comment'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
                           _source.filterServerSide(val);
                           createHistory(_sortIndex, val);
                         });
@@ -238,55 +308,55 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
           },
           customTableFooter: _customFooter
               ? (source, offset) {
-                  final maxPagesToShow = 6;
-                  final maxPagesBeforeCurrent = 3;
-                  final lastRequestDetails = source.lastDetails!;
-                  final rowsForPager = lastRequestDetails.filteredRows ??
-                      lastRequestDetails.totalRows;
-                  final totalPages = rowsForPager ~/ _rowsPerPage;
-                  final currentPage = (offset ~/ _rowsPerPage) + 1;
-                  List<int> pageList = [];
-                  if (currentPage > 1) {
-                    pageList.addAll(
-                      List.generate(currentPage - 1, (index) => index + 1),
-                    );
-                    //Keep up to 3 pages before current in the list
-                    pageList.removeWhere(
-                      (element) =>
-                          element < currentPage - maxPagesBeforeCurrent,
+            final maxPagesToShow = 6;
+            final maxPagesBeforeCurrent = 3;
+            final lastRequestDetails = source.lastDetails!;
+            final rowsForPager = lastRequestDetails.filteredRows ??
+                lastRequestDetails.totalRows;
+            final totalPages = rowsForPager ~/ _rowsPerPage;
+            final currentPage = (offset ~/ _rowsPerPage) + 1;
+            List<int> pageList = [];
+            if (currentPage > 1) {
+              pageList.addAll(
+                List.generate(currentPage - 1, (index) => index + 1),
+              );
+              //Keep up to 3 pages before current in the list
+              pageList.removeWhere(
+                    (element) =>
+                element < currentPage - maxPagesBeforeCurrent,
+              );
+            }
+            pageList.add(currentPage);
+            //Add reminding pages after current to the list
+            pageList.addAll(
+              List.generate(
+                maxPagesToShow - (pageList.length - 1),
+                    (index) => (currentPage + 1) + index,
+              ),
+            );
+            pageList.removeWhere((element) => element > totalPages);
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: pageList
+                  .map(
+                    (e) => TextButton(
+                  onPressed: e != currentPage
+                      ? () {
+                    //Start index is zero based
+                    source.setNextView(
+                      startIndex: (e - 1) * _rowsPerPage,
                     );
                   }
-                  pageList.add(currentPage);
-                  //Add reminding pages after current to the list
-                  pageList.addAll(
-                    List.generate(
-                      maxPagesToShow - (pageList.length - 1),
-                      (index) => (currentPage + 1) + index,
-                    ),
-                  );
-                  pageList.removeWhere((element) => element > totalPages);
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: pageList
-                        .map(
-                          (e) => TextButton(
-                            onPressed: e != currentPage
-                                ? () {
-                                    //Start index is zero based
-                                    source.setNextView(
-                                      startIndex: (e - 1) * _rowsPerPage,
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                              e.toString(),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  );
-                }
+                      : null,
+                  child: Text(
+                    e.toString(),
+                  ),
+                ),
+              )
+                  .toList(),
+            );
+          }
               : null,
         ),
       ],
@@ -295,18 +365,18 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
 
   // ignore: avoid_positional_boolean_parameters
   void setSort(int i, bool asc) => setState(() {
-        _sortIndex = i;
-        _sortAsc = asc;
-        History history = History(
-            DateFormat().add_jm().format(DateTime.now()),
-            widget.collectionName!,
-            widget.columns![_sortIndex],
-            _sortIndex,
-            "",
-            "assets/icons/folder.svg",
-            asc ? QueryType.SORT_ASCENDING: QueryType.SORT_DESCENDING);
-        historyProvider.addHistory(history);
-      });
+    _sortIndex = i;
+    _sortAsc = asc;
+    History history = History(
+        DateFormat().add_jm().format(DateTime.now()),
+        widget.collectionName!,
+        widget.columns![_sortIndex],
+        _sortIndex,
+        "",
+        "assets/icons/folder.svg",
+        asc ? QueryType.SORT_ASCENDING: QueryType.SORT_DESCENDING);
+    historyProvider.addHistory(history);
+  });
 
   void createHistory(int index, String query){
     print('called create history');
@@ -328,7 +398,7 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
 
 typedef SelectedCallBack = Function(String id, bool newSelectState);
 
-class ExampleSource extends AdvancedDataTableSource<Region> {
+class ExampleSource extends AdvancedDataTableSource<Partsupp> {
   List<String> selectedIds = [];
   String lastSearchTerm = '';
 
@@ -356,10 +426,10 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
   }
 
   @override
-  Future<RemoteDataSourceDetails<Region>> getNextPage(
-    NextPageRequest pageRequest,
-  ) async {
-    //the remote data source has to support the pagaing and sorting
+  Future<RemoteDataSourceDetails<Partsupp>> getNextPage(
+      NextPageRequest pageRequest,
+      ) async {
+    //the remote data source has to support the paging and sorting
     final queryParameter = <String, dynamic>{
       'offset': pageRequest.offset.toString(),
       'pageSize': pageRequest.pageSize.toString(),
@@ -388,15 +458,15 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
     //   throw Exception('Unable to query remote server');
     // }
 
-    List<Region>? data = [];
-    data.addAll(Data().regionList);
+    List<Partsupp> data = [];
+    data.addAll(Data().partsuppList);
 
-    if(Data().tempRegionList.isNotEmpty){
+    if(Data().tempPartsuppList.isNotEmpty){
       data.clear();
-      data.addAll(Data().tempRegionList);
-      print(data.length);
-      Data().tempRegionList.clear();
+      data.addAll(Data().tempPartsuppList);
+      Data().tempPartsuppList.clear();
     }
+
 
     int index = pageRequest.columnSortIndex!;
     if (lastSearchTerm.isNotEmpty) {
@@ -426,10 +496,22 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
             }
           case 1:
             {
-              print("called ${element.name} ");
-              return regExp.hasMatch(element.name.toLowerCase());
+              print("called ${element.partsuppKey} ");
+              return regExp.hasMatch(element.partsuppKey.toLowerCase());
             }
           case 2:
+            {
+              return regExp.hasMatch(element.part.toLowerCase());
+            }
+          case 3:
+            {
+              return regExp.hasMatch(element.availqty.toLowerCase());
+            }
+          case 4:
+            {
+              return regExp.hasMatch(element.supplycost.toLowerCase());
+            }
+          case 5:
             {
               return regExp.hasMatch(element.comment.toLowerCase());
             }
@@ -447,15 +529,31 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
         }
       case 1:
         {
-          data.sort((a, b) => a.name.compareTo(b.name));
+          data.sort((a, b) => a.partsuppKey.compareTo(b.partsuppKey));
           break;
         }
       case 2:
+        {
+          data.sort((a, b) => a.part.compareTo(b.part));
+          break;
+        }
+      case 3:
+        {
+          data.sort((a, b) => a.availqty.compareTo(b.availqty));
+          break;
+        }
+      case 4:
+        {
+          data.sort((a, b) => a.supplycost.compareTo(b.supplycost));
+          break;
+        }
+      case 5:
         {
           data.sort((a, b) => a.comment.compareTo(b.comment));
           break;
         }
     }
+
     if (!pageRequest.sortAscending!) {
       data = data.reversed.toList();
     }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
-import 'package:nosql_gui/models/tpch/region.dart';
+import 'package:nosql_gui/models/tpch/order.dart';
 import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +19,13 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }
 
-class RegionCollectionTable extends StatefulWidget {
-  const RegionCollectionTable(
+class OrderCollectionTable extends StatefulWidget {
+  const OrderCollectionTable(
       {Key? key, this.title, this.collectionName, this.columns, this.historyItem})
       : super(key: key);
   final String? title;
@@ -33,10 +33,10 @@ class RegionCollectionTable extends StatefulWidget {
   final String? collectionName;
   final List<String>? columns;
   @override
-  _RegionCollectionTableState createState() => _RegionCollectionTableState();
+  _OrderCollectionTableState createState() => _OrderCollectionTableState();
 }
 
-class _RegionCollectionTableState extends State<RegionCollectionTable> {
+class _OrderCollectionTableState extends State<OrderCollectionTable> {
   var _rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
   final _source = ExampleSource();
   var _sortIndex = 0;
@@ -100,7 +100,7 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
                   decoration: const InputDecoration(
                     labelText: 'Search by name',
                   ),
-                  onSubmitted: (vlaue) {
+                  onSubmitted: (value) {
                     _source.filterServerSide(_searchController.text);
                     setState(() {
                       _sortIndex = 1;
@@ -173,7 +173,7 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Name'),
+                    Text('ORDER STATUS'),
                     SizedBox(
                       child: TextField(
                         textAlign: TextAlign.start,
@@ -198,13 +198,174 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Comment'),
+                  Text('TOTAL PRICE'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
                       onSubmitted: (val) {
                         setState(() {
                           _sortIndex = 2;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('ORDER DATE'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('ORDER PRIORITY'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('CLERK'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('SHIP PRIORITY'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('COMMENT'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('CUSTOMER'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('LINEITEMS'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
                           _source.filterServerSide(val);
                           createHistory(_sortIndex, val);
                         });
@@ -238,55 +399,55 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
           },
           customTableFooter: _customFooter
               ? (source, offset) {
-                  final maxPagesToShow = 6;
-                  final maxPagesBeforeCurrent = 3;
-                  final lastRequestDetails = source.lastDetails!;
-                  final rowsForPager = lastRequestDetails.filteredRows ??
-                      lastRequestDetails.totalRows;
-                  final totalPages = rowsForPager ~/ _rowsPerPage;
-                  final currentPage = (offset ~/ _rowsPerPage) + 1;
-                  List<int> pageList = [];
-                  if (currentPage > 1) {
-                    pageList.addAll(
-                      List.generate(currentPage - 1, (index) => index + 1),
-                    );
-                    //Keep up to 3 pages before current in the list
-                    pageList.removeWhere(
-                      (element) =>
-                          element < currentPage - maxPagesBeforeCurrent,
+            final maxPagesToShow = 6;
+            final maxPagesBeforeCurrent = 3;
+            final lastRequestDetails = source.lastDetails!;
+            final rowsForPager = lastRequestDetails.filteredRows ??
+                lastRequestDetails.totalRows;
+            final totalPages = rowsForPager ~/ _rowsPerPage;
+            final currentPage = (offset ~/ _rowsPerPage) + 1;
+            List<int> pageList = [];
+            if (currentPage > 1) {
+              pageList.addAll(
+                List.generate(currentPage - 1, (index) => index + 1),
+              );
+              //Keep up to 3 pages before current in the list
+              pageList.removeWhere(
+                    (element) =>
+                element < currentPage - maxPagesBeforeCurrent,
+              );
+            }
+            pageList.add(currentPage);
+            //Add reminding pages after current to the list
+            pageList.addAll(
+              List.generate(
+                maxPagesToShow - (pageList.length - 1),
+                    (index) => (currentPage + 1) + index,
+              ),
+            );
+            pageList.removeWhere((element) => element > totalPages);
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: pageList
+                  .map(
+                    (e) => TextButton(
+                  onPressed: e != currentPage
+                      ? () {
+                    //Start index is zero based
+                    source.setNextView(
+                      startIndex: (e - 1) * _rowsPerPage,
                     );
                   }
-                  pageList.add(currentPage);
-                  //Add reminding pages after current to the list
-                  pageList.addAll(
-                    List.generate(
-                      maxPagesToShow - (pageList.length - 1),
-                      (index) => (currentPage + 1) + index,
-                    ),
-                  );
-                  pageList.removeWhere((element) => element > totalPages);
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: pageList
-                        .map(
-                          (e) => TextButton(
-                            onPressed: e != currentPage
-                                ? () {
-                                    //Start index is zero based
-                                    source.setNextView(
-                                      startIndex: (e - 1) * _rowsPerPage,
-                                    );
-                                  }
-                                : null,
-                            child: Text(
-                              e.toString(),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  );
-                }
+                      : null,
+                  child: Text(
+                    e.toString(),
+                  ),
+                ),
+              )
+                  .toList(),
+            );
+          }
               : null,
         ),
       ],
@@ -295,18 +456,18 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
 
   // ignore: avoid_positional_boolean_parameters
   void setSort(int i, bool asc) => setState(() {
-        _sortIndex = i;
-        _sortAsc = asc;
-        History history = History(
-            DateFormat().add_jm().format(DateTime.now()),
-            widget.collectionName!,
-            widget.columns![_sortIndex],
-            _sortIndex,
-            "",
-            "assets/icons/folder.svg",
-            asc ? QueryType.SORT_ASCENDING: QueryType.SORT_DESCENDING);
-        historyProvider.addHistory(history);
-      });
+    _sortIndex = i;
+    _sortAsc = asc;
+    History history = History(
+        DateFormat().add_jm().format(DateTime.now()),
+        widget.collectionName!,
+        widget.columns![_sortIndex],
+        _sortIndex,
+        "",
+        "assets/icons/folder.svg",
+        asc ? QueryType.SORT_ASCENDING: QueryType.SORT_DESCENDING);
+    historyProvider.addHistory(history);
+  });
 
   void createHistory(int index, String query){
     print('called create history');
@@ -328,7 +489,7 @@ class _RegionCollectionTableState extends State<RegionCollectionTable> {
 
 typedef SelectedCallBack = Function(String id, bool newSelectState);
 
-class ExampleSource extends AdvancedDataTableSource<Region> {
+class ExampleSource extends AdvancedDataTableSource<Order> {
   List<String> selectedIds = [];
   String lastSearchTerm = '';
 
@@ -356,9 +517,9 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
   }
 
   @override
-  Future<RemoteDataSourceDetails<Region>> getNextPage(
-    NextPageRequest pageRequest,
-  ) async {
+  Future<RemoteDataSourceDetails<Order>> getNextPage(
+      NextPageRequest pageRequest,
+      ) async {
     //the remote data source has to support the pagaing and sorting
     final queryParameter = <String, dynamic>{
       'offset': pageRequest.offset.toString(),
@@ -388,14 +549,14 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
     //   throw Exception('Unable to query remote server');
     // }
 
-    List<Region>? data = [];
-    data.addAll(Data().regionList);
+    List<Order> data = [];
+    data.addAll(Data().orderList);
 
-    if(Data().tempRegionList.isNotEmpty){
+    if(Data().tempOrderList.isNotEmpty){
       data.clear();
-      data.addAll(Data().tempRegionList);
-      print(data.length);
-      Data().tempRegionList.clear();
+      data.addAll(Data().tempOrderList);
+
+      Data().tempOrderList.clear();
     }
 
     int index = pageRequest.columnSortIndex!;
@@ -426,13 +587,42 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
             }
           case 1:
             {
-              print("called ${element.name} ");
-              return regExp.hasMatch(element.name.toLowerCase());
+              print("called ${element.orderstatus} ");
+              return regExp.hasMatch(element.orderstatus.toLowerCase());
             }
           case 2:
             {
+              return regExp.hasMatch(element.totalprice.toLowerCase());
+            }
+          case 3:
+            {
+              return regExp.hasMatch(element.orderdate.toLowerCase());
+            }
+          case 4:
+            {
+              return regExp.hasMatch(element.orderpriority.toLowerCase());
+            }
+          case 5:
+            {
+              return regExp.hasMatch(element.clerk.toLowerCase());
+            }
+          case 6:
+            {
+              return regExp.hasMatch(element.shippriority.toLowerCase());
+            }
+          case 7:
+            {
               return regExp.hasMatch(element.comment.toLowerCase());
             }
+          case 8:
+            {
+              return regExp.hasMatch(element.customer.toLowerCase());
+            }
+          case 9:
+            {
+              return regExp.hasMatch(element.lineitems.toLowerCase());
+            }
+
           default:
             return regExp.hasMatch(element.id.toLowerCase());
         }
@@ -447,12 +637,47 @@ class ExampleSource extends AdvancedDataTableSource<Region> {
         }
       case 1:
         {
-          data.sort((a, b) => a.name.compareTo(b.name));
+          data.sort((a, b) => a.orderstatus.compareTo(b.orderstatus));
           break;
         }
       case 2:
         {
+          data.sort((a, b) => a.totalprice.compareTo(b.totalprice));
+          break;
+        }
+      case 3:
+        {
+          data.sort((a, b) => a.orderdate.compareTo(b.orderdate));
+          break;
+        }
+      case 4:
+        {
+          data.sort((a, b) => a.orderpriority.compareTo(b.orderpriority));
+          break;
+        }
+      case 5:
+        {
+          data.sort((a, b) => a.clerk.compareTo(b.clerk));
+          break;
+        }
+      case 6:
+        {
+          data.sort((a, b) => a.shippriority.compareTo(b.shippriority));
+          break;
+        }
+      case 7:
+        {
           data.sort((a, b) => a.comment.compareTo(b.comment));
+          break;
+        }
+      case 8:
+        {
+          data.sort((a, b) => a.customer.compareTo(b.customer));
+          break;
+        }
+      case 9:
+        {
+          data.sort((a, b) => a.lineitems.compareTo(b.lineitems));
           break;
         }
     }

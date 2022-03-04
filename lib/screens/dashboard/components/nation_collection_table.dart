@@ -411,7 +411,16 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
     //   throw Exception('Unable to query remote server');
     // }
 
-    List<Nation>? data = Data.nationList;
+    List<Nation> data = [];
+    data.addAll(Data().nationList);
+    print('normal ${data.length}' );
+    if(Data().tempNationList.isNotEmpty){
+      data.clear();
+      data.addAll(Data().tempNationList);
+      print(data.length);
+      Data().tempNationList.clear();
+    }
+
     int index = pageRequest.columnSortIndex!;
     if (lastSearchTerm.isNotEmpty) {
       String pattern = '^';
@@ -486,7 +495,9 @@ class ExampleSource extends AdvancedDataTableSource<Nation> {
 
     return RemoteDataSourceDetails(
       data.length,
-      data,
+      data.skip(pageRequest.offset)
+          .take(pageRequest.pageSize)
+          .toList(),
       filteredRows: lastSearchTerm.isNotEmpty ? data.length : null,
     );
   }

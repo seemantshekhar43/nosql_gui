@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:nosql_gui/models/tpch/base_collection.dart';
+import 'package:nosql_gui/models/tpch/customer.dart';
+import 'package:nosql_gui/models/tpch/lineitem.dart';
+import 'package:nosql_gui/repository/data.dart';
+import 'package:provider/provider.dart';
 
-import '../../tables.dart';
-import 'customer.dart';
-import 'lineitem.dart';
+import '../../provider/data_provider.dart';
+import '../../screens/dashboard/components/order_collection_table.dart';
+
+
 
 class Order extends BaseCollection {
+  String customer;
   String orderstatus;
   String totalprice;
   String orderdate;
@@ -13,8 +19,7 @@ class Order extends BaseCollection {
   String clerk;
   String shippriority;
   String comment;
-  String customer;
-  // List<Lineitem> lineItems;
+  String lineitems;
 
   Order(
     id,
@@ -26,7 +31,7 @@ class Order extends BaseCollection {
     this.shippriority,
     this.comment,
     this.customer,
-    // this.lineItems
+    this.lineitems
   ) : super(id);
 
   //3
@@ -44,7 +49,25 @@ class Order extends BaseCollection {
         DataCell(Text(clerk)),
         DataCell(Text(shippriority)),
         DataCell(Text(comment)),
-        DataCell(Text(customer))
+        DataCell(Text(Data().customerList.firstWhere((element) => element.id == customer).name),
+            onTap: (){
+              Customer cus = Data().customerList.firstWhere((element) => element.id == customer);
+              Data().tempCustomerList.clear();
+              Data().tempCustomerList.add(cus);
+
+              Provider.of<DataProvider>(Data().context, listen: false).updateTempFlag("CUSTOMER");
+
+            }),
+        DataCell(Text(totalLineItems(id).toString()),
+            onTap: (){
+              List<Lineitem> list = Data().lineItemList.where((element) => element.order == id).toList();
+
+              Data().tempLineItemList.clear();
+              Data().tempLineItemList.addAll(list);
+
+              Provider.of<DataProvider>(Data().context, listen: false).updateTempFlag("LINEITEM");
+
+            }),
       ],
       onSelectChanged: (newState) {
         callback(id.toString(), newState ?? false);
@@ -53,7 +76,17 @@ class Order extends BaseCollection {
     );
   }
 
-  //1
+
+  int totalLineItems (orderKey){
+    int count = 0;
+    for(var item in Data().lineItemList){
+      if(item.order == orderKey){
+        count++;
+      }
+    }
+    return count;
+  }
+
   Order.fromJson(Map<String, dynamic> json)
       : orderstatus = json['O_ORDERSTATUS'].toString(),
         totalprice = json['O_TOTALPRICE'].toString(),
@@ -63,5 +96,6 @@ class Order extends BaseCollection {
         shippriority = json['O_SHIPPRIORITY'].toString(),
         comment = json['O_COMMENT'].toString(),
         customer = json['O_CUSTKEY'].toString(),
+        lineitems = "0",
         super(json['O_ORDERKEY'].toString());
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nosql_gui/models/tpch/base_collection.dart';
 
-import '../../tables.dart';
+import '../../screens/dashboard/components/part_collection_table.dart';
+
+
 
 class Region extends BaseCollection{
   String name;

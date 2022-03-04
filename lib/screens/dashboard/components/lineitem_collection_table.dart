@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
-import 'package:nosql_gui/models/tpch/customer.dart';
+import 'package:nosql_gui/models/tpch/lineitem.dart';
 import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +24,8 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   };
 }
 
-class CustomerCollectionTable extends StatefulWidget {
-  const CustomerCollectionTable(
+class LineitemCollectionTable extends StatefulWidget {
+  const LineitemCollectionTable(
       {Key? key, this.title, this.collectionName, this.columns, this.historyItem})
       : super(key: key);
   final String? title;
@@ -33,10 +33,10 @@ class CustomerCollectionTable extends StatefulWidget {
   final String? collectionName;
   final List<String>? columns;
   @override
-  _CustomerCollectionTableState createState() => _CustomerCollectionTableState();
+  _LineitemCollectionTableState createState() => _LineitemCollectionTableState();
 }
 
-class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
+class _LineitemCollectionTableState extends State<LineitemCollectionTable> {
   var _rowsPerPage = AdvancedPaginatedDataTable.defaultRowsPerPage;
   final _source = ExampleSource();
   var _sortIndex = 0;
@@ -173,7 +173,7 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Name'),
+                    Text('ORDER'),
                     SizedBox(
                       child: TextField(
                         textAlign: TextAlign.start,
@@ -198,7 +198,7 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ADDRESS'),
+                  Text('PART'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -221,7 +221,7 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('PHONE'),
+                  Text('PARTSUPP'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -244,7 +244,7 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ACCTBAL'),
+                  Text('LINE NUMBER'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -267,7 +267,240 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
               label: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('MKTSGMNT'),
+                  Text('QUANTITY'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('EXTENDED PRICE'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('DISCOUNT'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('TAX'),
+                    SizedBox(
+                      child: TextField(
+                        textAlign: TextAlign.start,
+                        onSubmitted: (val) {
+                          setState(() {
+                            _sortIndex = 1;
+                            _source.filterServerSide(val);
+                            createHistory(_sortIndex, val);
+                          });
+
+                        },
+                      ),
+                      height: 25,
+                      width: 100,
+                    ),
+                  ],
+                ),
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('RETURN FLAG'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 2;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('LINE STATUS'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('SHIP DATE'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('COMMIT DATE'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('RECEIPT DATE'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('SHIP INSTRUCT'),
+                  SizedBox(
+                    child: TextField(
+                      textAlign: TextAlign.start,
+                      onSubmitted: (val) {
+                        setState(() {
+                          _sortIndex = 3;
+                          _source.filterServerSide(val);
+                          createHistory(_sortIndex, val);
+                        });
+                      },
+                    ),
+                    height: 25,
+                    width: 100,
+                  ),
+                ],
+              ),
+              onSort: setSort,
+            ),
+            DataColumn(
+              label: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('SHIP MODE'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -291,29 +524,6 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('COMMENT'),
-                  SizedBox(
-                    child: TextField(
-                      textAlign: TextAlign.start,
-                      onSubmitted: (val) {
-                        setState(() {
-                          _sortIndex = 3;
-                          _source.filterServerSide(val);
-                          createHistory(_sortIndex, val);
-                        });
-                      },
-                    ),
-                    height: 25,
-                    width: 100,
-                  ),
-                ],
-              ),
-              onSort: setSort,
-            ),
-            DataColumn(
-              label: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('NATION'),
                   SizedBox(
                     child: TextField(
                       textAlign: TextAlign.start,
@@ -443,7 +653,7 @@ class _CustomerCollectionTableState extends State<CustomerCollectionTable> {
 
 typedef SelectedCallBack = Function(String id, bool newSelectState);
 
-class ExampleSource extends AdvancedDataTableSource<Customer> {
+class ExampleSource extends AdvancedDataTableSource<Lineitem> {
   List<String> selectedIds = [];
   String lastSearchTerm = '';
 
@@ -471,7 +681,7 @@ class ExampleSource extends AdvancedDataTableSource<Customer> {
   }
 
   @override
-  Future<RemoteDataSourceDetails<Customer>> getNextPage(
+  Future<RemoteDataSourceDetails<Lineitem>> getNextPage(
       NextPageRequest pageRequest,
       ) async {
     //the remote data source has to support the pagaing and sorting
@@ -503,16 +713,15 @@ class ExampleSource extends AdvancedDataTableSource<Customer> {
     //   throw Exception('Unable to query remote server');
     // }
 
-    List<Customer> data = [];
-    data.addAll(Data().customerList);
+    List<Lineitem> data = [];
+    data.addAll(Data().lineItemList);
 
-    if(Data().tempCustomerList.isNotEmpty){
+    if(Data().tempLineItemList.isNotEmpty){
       data.clear();
-      data.addAll(Data().tempCustomerList);
+      data.addAll(Data().tempLineItemList);
       print(data.length);
-      Data().tempCustomerList.clear();
+      Data().tempLineItemList.clear();
     }
-
     int index = pageRequest.columnSortIndex!;
     if (lastSearchTerm.isNotEmpty) {
       String pattern = '^';
@@ -541,32 +750,69 @@ class ExampleSource extends AdvancedDataTableSource<Customer> {
             }
           case 1:
             {
-              print("called ${element.name} ");
-              return regExp.hasMatch(element.name.toLowerCase());
+              print("called ${element.order} ");
+              return regExp.hasMatch(element.order.toLowerCase());
             }
           case 2:
             {
-              return regExp.hasMatch(element.address.toLowerCase());
+              return regExp.hasMatch(element.part.toLowerCase());
             }
           case 3:
             {
-              return regExp.hasMatch(element.phone.toLowerCase());
+              return regExp.hasMatch(element.partsupp.toLowerCase());
             }
           case 4:
             {
-              return regExp.hasMatch(element.acctbal.toLowerCase());
+              return regExp.hasMatch(element.lineNumber.toLowerCase());
             }
           case 5:
             {
-              return regExp.hasMatch(element.mktsegment.toLowerCase());
+              return regExp.hasMatch(element.quantity.toLowerCase());
             }
           case 6:
             {
-              return regExp.hasMatch(element.comment.toLowerCase());
+              return regExp.hasMatch(element.extendedPrice.toLowerCase());
             }
           case 7:
             {
-              return regExp.hasMatch(element.nation.toLowerCase());
+              return regExp.hasMatch(element.discount.toLowerCase());
+            }
+          case 8:
+            {
+              print("called ${element.tax} ");
+              return regExp.hasMatch(element.tax.toLowerCase());
+            }
+          case 9:
+            {
+              return regExp.hasMatch(element.returnFlag.toLowerCase());
+            }
+          case 10:
+            {
+              return regExp.hasMatch(element.lineStatus.toLowerCase());
+            }
+          case 11:
+            {
+              return regExp.hasMatch(element.shipDate.toLowerCase());
+            }
+          case 12:
+            {
+              return regExp.hasMatch(element.commitDate.toLowerCase());
+            }
+          case 13:
+            {
+              return regExp.hasMatch(element.receiptDate.toLowerCase());
+            }
+          case 14:
+            {
+              return regExp.hasMatch(element.shipInstruct.toLowerCase());
+            }
+          case 15:
+            {
+              return regExp.hasMatch(element.shipMode.toLowerCase());
+            }
+          case 16:
+            {
+              return regExp.hasMatch(element.comment.toLowerCase());
             }
 
           default:
@@ -583,37 +829,82 @@ class ExampleSource extends AdvancedDataTableSource<Customer> {
         }
       case 1:
         {
-          data.sort((a, b) => a.name.compareTo(b.name));
+          data.sort((a, b) => a.order.compareTo(b.order));
           break;
         }
       case 2:
         {
-          data.sort((a, b) => a.address.compareTo(b.address));
+          data.sort((a, b) => a.part.compareTo(b.part));
           break;
         }
       case 3:
         {
-          data.sort((a, b) => a.phone.compareTo(b.phone));
+          data.sort((a, b) => a.partsupp.compareTo(b.partsupp));
           break;
         }
       case 4:
         {
-          data.sort((a, b) => a.acctbal.compareTo(b.mktsegment));
+          data.sort((a, b) => a.lineNumber.compareTo(b.lineNumber));
           break;
         }
       case 5:
         {
-          data.sort((a, b) => a.mktsegment.compareTo(b.mktsegment));
+          data.sort((a, b) => a.quantity.compareTo(b.quantity));
           break;
         }
       case 6:
         {
-          data.sort((a, b) => a.comment.compareTo(b.comment));
+          data.sort((a, b) => a.extendedPrice.compareTo(b.extendedPrice));
           break;
         }
       case 7:
         {
-          data.sort((a, b) => a.nation.compareTo(b.nation));
+          data.sort((a, b) => a.discount.compareTo(b.discount));
+          break;
+        }
+      case 8:
+        {
+          data.sort((a, b) => a.tax.compareTo(b.tax));
+          break;
+        }
+      case 9:
+        {
+          data.sort((a, b) => a.returnFlag.compareTo(b.returnFlag));
+          break;
+        }
+      case 10:
+        {
+          data.sort((a, b) => a.lineStatus.compareTo(b.lineStatus));
+          break;
+        }
+      case 11:
+        {
+          data.sort((a, b) => a.shipDate.compareTo(b.shipDate));
+          break;
+        }
+      case 12:
+        {
+          data.sort((a, b) => a.commitDate.compareTo(b.commitDate));
+          break;
+        }
+      case 13:
+        {
+          data.sort((a, b) => a.receiptDate.compareTo(b.receiptDate));
+          break;
+        }
+      case 14:
+        {
+          data.sort((a, b) => a.shipInstruct.compareTo(b.shipInstruct));
+          break;
+        }
+      case 15:
+        {
+          data.sort((a, b) => a.shipMode.compareTo(b.shipMode));
+          break;
+        }
+      case 16:
+        {
+          data.sort((a, b) => a.comment.compareTo(b.comment));
           break;
         }
     }

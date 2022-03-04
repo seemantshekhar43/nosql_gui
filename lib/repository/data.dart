@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:nosql_gui/constants.dart';
 import 'package:nosql_gui/models/history.dart';
 import 'package:nosql_gui/models/tpch/customer.dart';
@@ -5,29 +6,42 @@ import 'package:nosql_gui/models/tpch/nation.dart';
 import 'package:nosql_gui/models/tpch/order.dart';
 import 'package:nosql_gui/models/tpch/region.dart';
 
+import '../models/tpch/lineitem.dart';
 import '../models/tpch/part.dart';
+import '../models/tpch/partsupp.dart';
+import '../models/tpch/supplier.dart';
+
+
 
 class Data{
-  Data._();
+  Data._privateConstructor();
+  static final Data _instance = Data._privateConstructor();
 
-  static List<History> historyList = [
-    History("09 : 43 PM", "REGION", "NAME", 1,  "", "assets/icons/folder.svg",QueryType.SELECT),
+  factory Data() {
+    return _instance;
+  }
 
-  ];
+  late BuildContext context;
 
-  static List<Region> regionList = [
-    Region("0", "AFRICA", "lar deposits. blithely final packages cajole"),
-    Region("1", "AMERICA", "hs use ironic, even requests."),
-    Region("2", "ASIA", "ges. thinly even pinto beans ca"),
-    Region("3", "EUROPE", "ly final courts cajole furiously final excuse"),
-    Region("4", "MIDDLE EAST", "luickly special accounts cajole carefully blithely"),
+  final List<Region> regionList = [];
+  final List<Nation> nationList = [];
+  final List<Customer> customerList = [];
+  final List<Order> orderList = [];
+  final List<Part> partList = [];
+  final List<Lineitem> lineItemList = [];
+  final List<Supplier> supplierList = [];
+  final List<Partsupp> partsuppList = [];
 
-  ];
+  final List<Region> tempRegionList = [];
+  final List<Nation> tempNationList = [];
+  final List<Customer> tempCustomerList = [];
+  final List<Order> tempOrderList = [];
+  final List<Part> tempPartList = [];
+  final List<Lineitem> tempLineItemList = [];
+  final List<Supplier> tempSupplierList = [];
+  final List<Partsupp> tempPartsuppList = [];
 
-  static List<Nation> nationList = [];
 
-  static List<Part> partList = [];
-  static List<Order> orderList = [];
-  static List<Customer> customerList = [];
+
 
 }

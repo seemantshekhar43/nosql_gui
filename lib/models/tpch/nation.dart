@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nosql_gui/models/tpch/base_collection.dart';
+import 'package:nosql_gui/models/tpch/region.dart';
+import 'package:nosql_gui/provider/data_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
+import 'package:provider/provider.dart';
 
-import '../../tables.dart';
+import '../../screens/dashboard/components/nation_collection_table.dart';
+
 
 
 class Nation extends BaseCollection {
@@ -19,7 +23,15 @@ class Nation extends BaseCollection {
         DataCell(Text(id.toString())),
         DataCell(Text(name)),
         DataCell(Text(comment)),
-        DataCell(Text(Data.regionList.firstWhere((element) => element.id == region).name)),
+        DataCell(Text(Data().regionList.firstWhere((element) => element.id == region).name),
+        onTap: (){
+          Region reg = Data().regionList.firstWhere((element) => element.id == region);
+          Data().tempRegionList.clear();
+          Data().tempRegionList.add(reg);
+
+          Provider.of<DataProvider>(Data().context, listen: false).updateTempFlag("REGION");
+
+        }),
       ],
       onSelectChanged: (newState) {
         callback(id.toString(), newState ?? false);

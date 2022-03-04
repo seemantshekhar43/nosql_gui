@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nosql_gui/provider/data_provider.dart';
 import 'package:nosql_gui/provider/history_provider.dart';
 import 'package:nosql_gui/repository/data.dart';
 import '/screens/main/main_screen.dart';
@@ -18,6 +19,7 @@ import 'models/tpch/part.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => HistoryProvider()),
+    ChangeNotifierProvider(create: (context) => DataProvider()),
   ], child: MyApp()));
 }
 
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: FutureBuilder<String>(
-          future: loadData(), // function where you call your api
+          future: Provider.of<DataProvider>(context, listen: false).loadData(), // function where you call your api
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             // AsyncSnapshot<Your object type>
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -58,45 +60,5 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<String> loadData() async {
-    //2
-    String partsJson = await rootBundle.loadString('tpch_10mb/PART.json');
-    List partsData = jsonDecode(partsJson).toList();
-    partsData.forEach((element) {
-      Part part = Part.fromJson(element);
-      Data.partList.add(part);
-    });
 
-    String orderJson = await rootBundle.loadString('tpch_10mb/ORDERS.json');
-    List orderData = jsonDecode(orderJson).toList();
-    orderData.forEach((element) {
-      Order order = Order.fromJson(element);
-      Data.orderList.add(order);
-    });
-
-    String customerJson =
-        await rootBundle.loadString('tpch_10mb/CUSTOMER.json');
-    List customerData = jsonDecode(customerJson).toList();
-    customerData.forEach((element) {
-      Customer customer = Customer.fromJson(element);
-      Data.customerList.add(customer);
-    });
-
-    String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
-    List nationData = jsonDecode(nationJson).toList();
-    nationData.forEach((element) {
-      Nation nation = Nation.fromJson(element);
-      Data.nationList.add(nation);
-    });
-
-    // String regionJson = await rootBundle.loadString('tpch_10mb/REGION.json');
-    // List regionData = jsonDecode(regionJson).toList();
-    // regionData.forEach((element) {
-    //   Region region = Region.fromJson(element);
-    //   Data.regionList.add(region);
-    //
-    // });
-
-    return "true";
-  }
 }
