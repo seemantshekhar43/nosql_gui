@@ -10,6 +10,8 @@ import 'package:nosql_gui/models/tpch/order.dart';
 import 'package:nosql_gui/models/tpch/part.dart';
 import 'package:nosql_gui/models/tpch/partsupp.dart';
 import 'package:nosql_gui/models/tpch/region.dart';
+import 'package:nosql_gui/utilities/api-response.dart';
+import 'package:nosql_gui/utilities/api_helper.dart';
 
 import '../models/tpch/supplier.dart';
 import '../repository/data.dart';
@@ -39,7 +41,14 @@ class DataProvider extends ChangeNotifier{
 
   Future<String> loadData() async {
 
-    String partsJson = await rootBundle.loadString('tpch_10mb/PART.json');
+
+
+    // Map<String, String> map = {
+    //   "param": '{"table": "orders", "where_expr": {"O_TOTALPRICE": {"\$lte": 1000}}, "sortby": {"col": "O_TOTALPRICE", "is_asc": true}, "page_num": 1}'
+    // };
+    // ApiResponse apiResponse = await ApiHelper().getRequest(endpoint: "/api/", query: map);
+    // print(apiResponse);
+    String partsJson = await rootBundle.loadString('assets/tpch_10mb/PART.json');
     List partsData = jsonDecode(partsJson).toList();
     for (var element in partsData) {
       Part part = Part.fromJson(element);
@@ -47,7 +56,7 @@ class DataProvider extends ChangeNotifier{
     }
 
 
-    String regionJson = await rootBundle.loadString('tpch_10mb/REGION.json');
+    String regionJson = await rootBundle.loadString('assets/tpch_10mb/REGION.json');
     List regionData = jsonDecode(regionJson).toList();
     for (var element in regionData) {
       Region region = Region.fromJson(element);
@@ -55,28 +64,28 @@ class DataProvider extends ChangeNotifier{
 
     }
 
-    String nationJson = await rootBundle.loadString('tpch_10mb/NATION.json');
+    String nationJson = await rootBundle.loadString('assets/tpch_10mb/NATION.json');
     List nationData = jsonDecode(nationJson).toList();
     for (var element in nationData) {
       Nation nation = Nation.fromJson(element);
       _nationList.add(nation);
     }
 
-    String supplierJson = await rootBundle.loadString('tpch_10mb/SUPPLIER.json');
+    String supplierJson = await rootBundle.loadString('assets/tpch_10mb/SUPPLIER.json');
     List supplierData = jsonDecode(supplierJson).toList();
     for (var element in supplierData) {
       Supplier supplier = Supplier.fromJson(element);
       _supplierList.add(supplier);
     }
 
-    String partsuppJson = await rootBundle.loadString('tpch_10mb/PARTSUPP.json');
+    String partsuppJson = await rootBundle.loadString('assets/tpch_10mb/PARTSUPP.json');
     List partsuppData = jsonDecode(partsuppJson).toList();
     for (var element in partsuppData) {
       Partsupp partsupp = Partsupp.fromJson(element);
       _partsuppList.add(partsupp);
     }
 
-    String lineitemJson = await rootBundle.loadString('tpch_10mb/LINEITEM.json');
+    String lineitemJson = await rootBundle.loadString('assets/tpch_10mb/LINEITEM.json');
     List lineitemData = jsonDecode(lineitemJson).toList();
     for (var element in lineitemData) {
       Lineitem lineitem = Lineitem.fromJson(element);
@@ -84,14 +93,14 @@ class DataProvider extends ChangeNotifier{
     }
 
     String customerJson =
-    await rootBundle.loadString('tpch_10mb/CUSTOMER.json');
+    await rootBundle.loadString('assets/tpch_10mb/CUSTOMER.json');
     List customerData = jsonDecode(customerJson).toList();
     for (var element in customerData) {
       Customer customer = Customer.fromJson(element);
       _customerList.add(customer);
     }
 
-    String orderJson = await rootBundle.loadString('tpch_10mb/ORDERS.json');
+    String orderJson = await rootBundle.loadString('assets/tpch_10mb/ORDERS.json');
     List orderData = jsonDecode(orderJson).toList();
     for (var element in orderData) {
       Order order = Order.fromJson(element);
